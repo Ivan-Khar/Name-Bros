@@ -26,9 +26,9 @@ public abstract class EntityMixin {
     )
     private void isTeammate(Entity other, CallbackInfoReturnable<Boolean> cir) {
         Config config = Config.INSTANCE;
-        if(config.isDebug()) Main.LOGGER.info(this.getType().getUntranslatedName() + " " + other.getType().getUntranslatedName());
+        if(config.isDebug()) Main.LOGGER.info(this.getType().toString().replace("entity.", "").replace(".", ":") + " " + other.getType().toString().replace("entity.", "").replace(".", ":"));
 
-        if(config.enabled() && !config.getBlacklist().contains(this.getType().getUntranslatedName()) && !config.getBlacklist().contains(other.getType().getUntranslatedName())) {
+        if(config.enabled() && !config.getBlacklist().contains(this.getType().toString().replace("entity.", "").replace(".", ":")) && !config.getBlacklist().contains(other.getType().toString().replace("entity.", "").replace(".", ":"))) {
             if (this.getCustomName() != null && other.getName() != null && this.getCustomName().getString().equals(other.getName().getString()))
                 cir.setReturnValue(true);
             if (this.getCustomName() != null && other.getCustomName() != null && this.getCustomName().getString().equals(other.getCustomName().getString()))

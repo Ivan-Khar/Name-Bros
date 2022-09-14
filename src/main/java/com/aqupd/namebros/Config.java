@@ -15,7 +15,7 @@ public class Config {
 
   private boolean ENABLE = true;
   private boolean DEBUG = false;
-  private List<String> BLACKLIST = new ArrayList<>() {{ add("warden"); add("wither"); }};
+  private List<String> BLACKLIST = new ArrayList<>() {{ add("minecraft:warden"); add("minecraft:wither"); }};
 
   public boolean isDebug() { return DEBUG; }
   public boolean enabled() { return ENABLE; }
@@ -38,15 +38,13 @@ public class Config {
     return false;
   }
 
-  public boolean toggleEnable() {
+  public void toggleEnable() {
     ENABLE = !ENABLE;
     save();
-    return ENABLE;
   }
-  public boolean toggleDebug() {
+  public void toggleDebug() {
     DEBUG = !DEBUG;
     save();
-    return DEBUG;
   }
 
   public void load() {

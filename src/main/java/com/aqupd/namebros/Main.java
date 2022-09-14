@@ -6,8 +6,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.command.argument.ArgumentTypes;
-import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.EntitySummonArgumentType;
+import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,19 +25,33 @@ public class Main implements ModInitializer {
 
     CommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess, environment) -> {
       dispatcher.register(literal("namebros").requires(source -> Permissions.check(source, "namebros.command.use", 3))
-              .then(literal("add").then(argument("Entity name", EntityArgumentType.entity())).executes(ctx -> {
-
-                return 1;
-              }))
-              .then(literal("debug").executes(ctx -> {
-                conf.toggleDebug();
-                ctx.getSource().sendMessage(Text.literal("Debug mode is: " + (conf.isDebug()?"ON":"OFF")));
-                return 1;
-              })).then(literal("enable").executes(ctx -> {
-                conf.toggleEnable();
-                ctx.getSource().sendMessage(Text.literal("Mod is " + (conf.enabled()?"enabled":"disabled")));
-                return 1;
-              }))
+          .then(literal("addblacklist").then(argument("Entity name", EntitySummonArgumentType.entitySummon()).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(ctx -> {
+            String eName = EntitySummonArgumentType.getEntitySummon(ctx, "Entity name").toString();
+            if(conf.addBlacklist(eName)) ctx.getSource().sendMessage(Text.literal("Added entity \"" + eName + "\" to the blacklist"));
+            else ctx.getSource().sendMessage(Text.literal("Entity \"" + eName + "\" already blacklisted"));
+            return 1;
+          })))
+          .then(literal("removeblacklist").then(argument("Entity name", EntitySummonArgumentType.entitySummon()).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(ctx -> {
+            String eName = EntitySummonArgumentType.getEntitySummon(ctx, "Entity name").toString();
+            if(conf.removeBlackList(eName)) ctx.getSource().sendMessage(Text.literal("Removed entity \"" + eName + "\" from the blacklist"));
+            else ctx.getSource().sendMessage(Text.literal("Entity \"" + eName + "\" not blacklisted"));
+            return 1;
+          })))
+          .then(literal("debug").executes(ctx -> {
+            conf.toggleDebug();
+            ctx.getSource().sendMessage(Text.literal("Debug mode is: " + (conf.isDebug()?"ON":"OFF")));
+            return 1;
+          }))
+          .then(literal("enable").executes(ctx -> {
+            conf.toggleEnable();
+            ctx.getSource().sendMessage(Text.literal("Mod is " + (conf.enabled()?"enabled":"disabled")));
+            return 1;
+          }))
+          .then(literal("reload").executes(ctx -> {
+            conf.load();
+            ctx.getSource().sendMessage(Text.literal("Reloaded config files"));
+            return 1;
+          }))
       );
     }));
     LOGGER.info("Mod initialized");
