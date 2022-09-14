@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "aqupdblank",
+  "id": "namebros",
   "version": "${version}",
 
-  "name": "Blank mod",
-  "description": "There's nothing here",
+  "name": "Name bros",
+  "description": "Mod that makes entities with the same name not attach each others",
   "authors": [
-    "AqUpd!"
+    "Aqua_tic(AqUpd)!"
   ],
   "contact": {
     "homepage": "https://aqupd.ru",
@@ -18,11 +18,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.aqupd.aqupdblank.Main"
+      "com.aqupd.namebros.Main"
     ]
   },
   "mixins": [
-    "aqupdblank.mixins.json"
+    "namebros.mixins.json"
   ],
 
   "depends": {
