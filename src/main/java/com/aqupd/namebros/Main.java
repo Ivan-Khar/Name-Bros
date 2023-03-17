@@ -25,13 +25,13 @@ public class Main implements ModInitializer {
     CommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess, environment) -> dispatcher
         .register(literal("namebros").requires(source -> Permissions.check(source, "namebros.command.use", 3))
         .then(literal("addblacklist").then(argument("Entity name", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENTITY_TYPE)).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(ctx -> {
-          String eName = RegistryEntryArgumentType.getSummonableEntityType(ctx, "Entity name").toString();
+          String eName = RegistryEntryArgumentType.getSummonableEntityType(ctx, "Entity name").getKey().get().getValue().toString();
           if(conf.addBlacklist(eName)) ctx.getSource().sendMessage(Text.literal("Added entity \"" + eName + "\" to the blacklist"));
           else ctx.getSource().sendMessage(Text.literal("Entity \"" + eName + "\" already blacklisted"));
           return 1;
         })))
         .then(literal("removeblacklist").then(argument("Entity name", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENTITY_TYPE)).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(ctx -> {
-          String eName = RegistryEntryArgumentType.getSummonableEntityType(ctx, "Entity name").toString();
+          String eName = RegistryEntryArgumentType.getSummonableEntityType(ctx, "Entity name").getKey().get().getValue().toString();
           if(conf.removeBlackList(eName)) ctx.getSource().sendMessage(Text.literal("Removed entity \"" + eName + "\" from the blacklist"));
           else ctx.getSource().sendMessage(Text.literal("Entity \"" + eName + "\" not blacklisted"));
           return 1;
